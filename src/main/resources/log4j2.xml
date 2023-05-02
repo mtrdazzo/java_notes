@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+
+    <Properties>
+        <Property name="DEBUG_PATTERN">[%d{yyyy-MM-dd HH:mm:ss}] %highlight{%-5p}{FATAL=bg_red, ERROR=red, WARN=yellow, PASS=green, TEST=white, FAIL=red, DEBUG=magenta, INFO=blue} [%t] %c{1}:%L - %m%n</Property>
+        <Property name="RESULTS_PATTERN">[%d{yyyy-MM-dd HH:mm:ss}] %m%n</Property>
+    </Properties>
+
+    <CustomLevels>
+        <CustomLevel name="PASS" intLevel="401" />
+        <CustomLevel name="TEST" intLevel="402" />
+        <CustomLevel name="FAIL" intLevel="403" />
+    </CustomLevels>
+
+    <Appenders>
+
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${DEBUG_PATTERN}" />
+            <LevelRangeFilter minLevel="FATAL" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <RollingFile name="ALL" fileName="logs/REPLACE_STR.log" filePattern="logs/REPLACE_STR-%d{yyyy-MM-dd}-%i.log" createOnDemand="true">
+            <LevelRangeFilter minLevel="PASS" maxLevel="FAIL" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${RESULTS_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="SUMMARY" fileName="logs/REPLACE_STR.log" filePattern="logs/REPLACE_STR-%d{yyyy-MM-dd}-%i.log" createOnDemand="true">
+            <LevelRangeFilter minLevel="TEST" maxLevel="FAIL" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${RESULTS_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Root>
+        <Logger name="active" additivity="false" level="DEBUG">
+        </Logger>
+    </Loggers>
+
+</Configuration>
